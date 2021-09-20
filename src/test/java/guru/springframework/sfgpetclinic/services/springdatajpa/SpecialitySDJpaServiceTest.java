@@ -6,23 +6,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.verification.VerificationMode;
+import org.mockito.quality.Strictness;
+import org.mockito.stubbing.LenientStubber;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
-
+import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
+
 class SpecialitySDJpaServiceTest {
 
-    @Mock
+    @Mock()
     SpecialtyRepository repository;
 
 
@@ -101,5 +100,78 @@ class SpecialitySDJpaServiceTest {
     @Test
     void testDelete() {
         service.delete(new Speciality());
+    }
+
+
+    @Test
+    void testDoThrow() {
+        doThrow(new RuntimeException("ka booom!")).when(repository).delete(any());
+        assertThrows(RuntimeException.class, () -> repository.delete(any(Speciality.class)));
+        then(repository).should().delete(any());
+
+    }
+
+
+    @Test
+    void testDoThrowBdd() {
+        given(repository.findById(1L)).willThrow(new RuntimeException("ka booom baby booo!!!!"));
+
+        assertThrows(RuntimeException.class, () -> service.findById(1L));
+
+
+        then(repository).should().findById(1L);
+
+    }
+
+
+    @Test
+    void testDeleteBdd() {
+        willThrow(new RuntimeException("boom bro booom!!!")).given(repository).delete(any());
+
+        assertThrows(RuntimeException.class, () -> repository.delete(any(Speciality.class)));
+        then(repository).should().delete(any());
+
+    }
+
+
+
+
+    @Test
+    void testSaveLambda() {
+            final String MATCH_ME = "match_me";
+
+            Speciality speciality  = new Speciality();
+            speciality.setDescription(MATCH_ME);
+
+            Speciality saveSpecialty = new Speciality();
+            saveSpecialty.setId(1L);
+//      given
+            given(repository.save(argThat(arg  -> arg.getDescription().equals(MATCH_ME)))).willReturn(saveSpecialty);
+
+
+            Speciality returnedSpeciality = service.save(speciality);
+
+//      then
+            assertThat(returnedSpeciality.getId()).isEqualTo(1L);
+
+    }
+
+    @Test
+    void testSAveLambdaNoMatch() {
+        final String MATCH_ME = "match_me";
+
+        Speciality speciality  = new Speciality();
+        speciality.setDescription("not a match");
+
+        Speciality saveSpecialty = new Speciality();
+        saveSpecialty.setId(1L);
+//      given
+                lenient().when(repository.save(argThat(argument -> argument.getDescription().equals(MATCH_ME)))).thenReturn(saveSpecialty);
+
+        Speciality returnedSpeciality = service.save(speciality);
+
+//      then
+        
+        assertNull(returnedSpeciality);
     }
 }

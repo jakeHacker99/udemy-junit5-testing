@@ -24,7 +24,6 @@ class VisitSDJpaServiceTest {
 
     Visit visit =new Visit();
 
-
     @Mock
     VisitRepository repository;
 
