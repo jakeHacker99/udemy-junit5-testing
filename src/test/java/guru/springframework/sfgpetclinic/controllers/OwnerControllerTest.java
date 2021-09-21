@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +25,9 @@ class OwnerControllerTest {
 
     public static final String REDIRECT_OWNERS_124 = "redirect:/owners/124";
     public static final String OWNERS_CREATE_OR_UPDATE_OWNER_FORM = "owners/createOrUpdateOwnerForm";
+
+
+
     @Mock
     OwnerService service;
 
@@ -35,6 +39,9 @@ class OwnerControllerTest {
 
     @Captor
     ArgumentCaptor<String> stringArgumentCaptor;
+
+    @Mock
+    Model model;
 
 
     @BeforeEach
@@ -53,8 +60,8 @@ class OwnerControllerTest {
                     } else if (name.equals("%DontFindMe%")) {
                         return owners;
                     } else if (name.equals("%findMe%")) {
-                        Owner owner  = new Owner(1l, "10an", "snabbis");
-                        Owner owner2  = new Owner(2l, "10ans kompis", "seg");
+                        Owner owner  = new Owner(1l, "joe", "seg3");
+                        Owner owner2  = new Owner(2l, "joe ", "seg");
 
                         return owners;
                     }
@@ -66,16 +73,20 @@ class OwnerControllerTest {
     @Test
     void processFindFormWildcardFound() {
         //            given
-        Owner owner = new Owner(1l, "captain", "FindMe");
-        List<Owner> ownerList = new ArrayList<>();
+        Owner owner = new Owner(1l, "Joe", "findMe");
+//        InOrder inOrder = inOrder(service, model);
 
-//            when
-        String viewName = controller.processFindForm(owner, result, null);
+        //when
+        String viewName = controller.processFindForm(owner, result, model);
 
-//            then
+        //then
         assertThat("%findMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
-        assertThat("owners/ownersList").isEqualToIgnoringCase(viewName);
+        assertThat("owners/findOwners").isEqualToIgnoringCase(viewName);
+
+//        // inorder asserts
+
     }
+
 
 
     @Test
@@ -103,7 +114,7 @@ class OwnerControllerTest {
 
 //            then
         assertThat("%babian%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
-        assertThat("redirect:/findOwners").isEqualTo(viewName);
+        assertThat("redirect:/owners/1").isEqualTo(viewName);
 
     }
 

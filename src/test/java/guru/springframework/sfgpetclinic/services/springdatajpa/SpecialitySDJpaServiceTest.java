@@ -36,6 +36,7 @@ class SpecialitySDJpaServiceTest {
 
         verify(repository, times(2)).deleteById(anyLong());
 
+
     }
 
 
@@ -69,6 +70,10 @@ class SpecialitySDJpaServiceTest {
 //      then
         assertThat(foundSpecialty).isNotNull();
         verify(repository, times(1)).findById(any());
+
+//        timeoutTest
+          then(repository).should(timeout(1)).findById(anyLong());
+          then(repository).shouldHaveNoMoreInteractions();
     }
 
     @Test
