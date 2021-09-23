@@ -22,4 +22,5 @@ GitHub Issues will not be addressed.
 
 ### Log 
 22/09 i worked on Spring context - yanny / laurel Profiels, Scans & both assignment
+23n/09 i worked on Spring context - yanny / laurel TestProperties and was introduced to MVC Testing
 
