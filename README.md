@@ -26,3 +26,4 @@ GitHub Issues will not be addressed.
 ###
 23/09 i worked on Spring context - yanny / laurel TestProperties and was introduced to MVC Testing
 
+25/09 today i impl mch testing with posts and pathVariable and was introduced to sprinboot testing
