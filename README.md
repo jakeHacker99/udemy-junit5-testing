@@ -31,3 +31,6 @@ GitHub Issues will not be addressed.
 ###
 26/09 impl circle ci with badge and introduced to (jayways) JsonPath
 
+###
+27/09 impl ObjectMapper(jackson using datetimeformmater) && impl assignment IT and BeerOrder unit Test
+
