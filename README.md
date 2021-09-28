@@ -34,3 +34,5 @@ GitHub Issues will not be addressed.
 ###
 27/09 impl ObjectMapper(jackson using datetimeformmater) && impl assignment IT and BeerOrder unit Test
 
+### 
+28/09 ended section on wiremocks it's record feature was really cool because you can save api calls to the resource direcotyr and I also  impl restdocs with ascidoctor config 
